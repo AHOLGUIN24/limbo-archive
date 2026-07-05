@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>limbo — archivo digital de diseño gráfico</title>
+  <meta name="description" content="Limbo es un archivo curado y repositorio personal de piezas gráficas de diseño, posters y arte digital con estética editorial minimalista." />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+
+  <!-- Ambient Starry Sky & Moving White Gradient Background Animation -->
+  <div class="ambient-bg-container" aria-hidden="true">
+    <!-- Starry Sky Layers (Twinkling & Floating Stars) -->
+    <div class="starfield starfield-small"></div>
+    <div class="starfield starfield-medium"></div>
+    <div class="starfield starfield-large"></div>
+    <!-- Moving White/Grey Gradient Orbs -->
+    <div class="gradient-orb orb-alpha"></div>
+    <div class="gradient-orb orb-beta"></div>
+    <div class="gradient-orb orb-gamma"></div>
+    <!-- Topographic Animated Gradient Side Panels (To fill empty widescreen margins) -->
+    <div class="topo-side-panel topo-left" id="topo-left"></div>
+    <div class="topo-side-panel topo-right" id="topo-right"></div>
+  </div>
+
+  <!-- Sticky Header (Clean Public View without intrusive admin button) -->
+  <header class="site-header stagger-item" style="--stagger-delay: 0.02s;">
+    <div class="header-inner">
+      <a href="#/" class="site-logo" title="Limbo Archive">
+        <img src="/assets/logo.png" alt="Limbo Logo" class="header-logo-img" />
+        <span>limbo</span>
+      </a>
+      <div class="header-right">
+        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="social-icon-link" aria-label="Instagram">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navigation & Filters Bar -->
+  <nav class="site-nav-bar stagger-item" style="--stagger-delay: 0.05s;">
+    <div class="nav-inner">
+      <div class="category-tabs" id="category-tabs">
+        <!-- Dynamically rendered tabs -->
+      </div>
+      <div class="nav-controls">
+        <div class="theme-toggle" id="theme-toggle">
+          <button class="theme-btn active" data-theme="dark" title="Dark Mode" data-i18n="theme_dark">dark</button>
+          <span class="sep">/</span>
+          <button class="theme-btn" data-theme="light" title="Light Mode" data-i18n="theme_light">light</button>
+        </div>
+        <span class="sep">|</span>
+        <div class="lang-switch" id="lang-switch">
+          <button class="lang-btn" data-lang="en">en</button>
+          <span class="sep">/</span>
+          <button class="lang-btn active" data-lang="es">es</button>
+        </div>
+        <span class="sep">|</span>
+        <div class="view-toggle" id="view-toggle">
+          <button class="view-btn active" data-view="grid" title="Grid View" data-i18n="view_grid">grid</button>
+          <span class="sep">/</span>
+          <button class="view-btn" data-view="list" title="List View" data-i18n="view_list">list</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main View Router Container -->
+  <div class="app-content-wrapper">
+
+    <!-- 1. GALLERY VIEW (Default) -->
+    <main id="gallery-view" class="view-section active">
+      <div class="gallery-info-banner stagger-item" style="--stagger-delay: 0.08s;" id="gallery-banner">
+        <span class="banner-text" data-i18n="archive_desc">archivo curado de piezas gráficas & diseño editorial. formato original 1080x1920.</span>
+        <span class="banner-count" id="pieces-count">0 piezas</span>
+      </div>
+      
+      <!-- Masonry Grid / List -->
+      <div id="gallery-grid" class="masonry-grid view-mode-grid">
+        <!-- Dynamically rendered cards with staggered delay -->
+      </div>
+    </main>
+
+    <!-- 2. DETAIL VIEW (/piezas/[id]) -->
+    <section id="detail-view" class="view-section hidden">
+      <div class="detail-top-bar stagger-item" style="--stagger-delay: 0.05s;">
+        <a href="#/" id="back-from-detail-btn" class="back-link">← <span data-i18n="back_archive">volver al archivo</span></a>
+      </div>
+      <div class="detail-container" id="detail-content">
+        <!-- Dynamically rendered piece detail -->
+      </div>
+    </section>
+
+    <!-- 3. ADMIN VIEW (/admin) — Owner Repository View -->
+    <section id="admin-view" class="view-section hidden">
+      <!-- STANDARD ADMIN LOGIN CONTAINER -->
+      <div id="admin-login-container" class="admin-login-wrapper">
+        <div class="admin-login-card">
+          <div class="admin-login-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+          </div>
+          <h3 class="admin-login-title">acceso curatorial — limbo archive</h3>
+          <p class="admin-login-sub">Introduce tus credenciales de administrador para gestionar las obras del repositorio digital.</p>
+          
+          <form id="admin-login-form" style="display: flex; flex-direction: column; gap: 14px; text-align: left; margin-top: 16px;">
+            <div>
+              <label class="form-label mb-1 block" style="font-size: 11px; text-transform: uppercase; color: var(--text-light);">usuario / username</label>
+              <input type="text" id="login-username" class="form-input" placeholder="admin" required autocomplete="username" />
+            </div>
+            <div>
+              <label class="form-label mb-1 block" style="font-size: 11px; text-transform: uppercase; color: var(--text-light);">contraseña / password</label>
+              <input type="password" id="login-password" class="form-input" placeholder="••••••••••••" required autocomplete="current-password" />
+            </div>
+            <button type="submit" class="btn-primary mt-2" id="btn-do-login" style="width: 100%; justify-content: center; background: linear-gradient(135deg, #00ff66, #00ffff); color: #000; font-weight: 700; padding: 14px; font-size: 14px;">
+              Ingresar al Panel →
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- MAIN ADMIN PORTAL CONTENT (HIDDEN UNTIL LOGGED IN) -->
+      <div id="admin-portal-content" class="hidden">
+        <div class="admin-header stagger-item" style="--stagger-delay: 0.05s;">
+          <div class="admin-title-area">
+            <h1 class="admin-title" data-i18n="admin_title">repositorio personal / panel de admin</h1>
+            <p class="admin-subtitle" data-i18n="admin_subtitle">gestiona tus piezas gráficas locales, pósters 1080x1920 y base de datos.</p>
+          </div>
+          <div style="display: flex; align-items: center; gap: 16px;">
+            <a href="#" id="btn-admin-logout" class="back-link" style="color: #ff0055; border-color: rgba(255,0,85,0.3);">🔒 cerrar sesión</a>
+            <a href="#/" class="back-link">✕ <span data-i18n="exit_admin">salir del panel</span></a>
+          </div>
+        </div>
+
+        <!-- Admin Actions Toolbar -->
+        <div class="admin-toolbar stagger-item" style="--stagger-delay: 0.15s;">
+          <button class="admin-action-btn primary" id="btn-show-new-modal">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            <span data-i18n="add_new_piece">subir nueva pieza</span>
+          </button>
+          <button class="admin-action-btn" id="btn-manage-categories">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+            <span data-i18n="manage_categories">categorías</span>
+          </button>
+          <button class="admin-action-btn" id="btn-manage-socials">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+            <span data-i18n="manage_socials">redes sociales (url)</span>
+          </button>
+          <button class="admin-action-btn" id="btn-export-archive">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            <span data-i18n="export_json">exportar archivo (.json)</span>
+          </button>
+          <button class="admin-action-btn" id="btn-import-archive">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+            <span data-i18n="import_json">importar archivo (.json)</span>
+          </button>
+          <input type="file" id="import-file-input" accept=".json" class="hidden" />
+          <button class="admin-action-btn danger-subtle" id="btn-reset-archive">
+            <span data-i18n="reset_defaults">restaurar muestra</span>
+          </button>
+        </div>
+
+        <!-- Admin Pieces List Table -->
+        <div class="admin-content stagger-item" style="--stagger-delay: 0.25s;">
+          <h2 class="admin-section-label" data-i18n="saved_pieces">piezas en el repositorio (<span id="admin-pieces-count">0</span>)</h2>
+          <div class="admin-pieces-list" id="admin-pieces-container">
+            <!-- Dynamically populated table/grid of pieces -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- CONTINUOUS ARTWORK CAROUSEL SECTION (Larger, No Borders, No Spacing, Never Pauses) -->
+  <section class="archive-carousel-section stagger-item" style="--stagger-delay: 0.12s;" id="archive-carousel">
+    <div class="carousel-header">
+      <span data-i18n="carousel_title">// archivo continuo — exploración visual</span>
+    </div>
+    <div class="carousel-track-container">
+      <div class="carousel-track" id="carousel-track">
+        <!-- Dynamically rendered carousel thumbnails -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT / AUTHOR PROFILE SECTION (WITH SEQUENTIAL STRIP BLOCK REVEAL ANIMATION) -->
+  <section class="about-author-section stagger-item" style="--stagger-delay: 0.14s;" id="about-section">
+    <div class="about-header">
+      <span data-i18n="about_label">// ficha del autor — perfil curatorial</span>
+      <button class="strip-replay-btn" id="btn-replay-strip" title="Reproducir animación de tira">↻ replay reveal</button>
+    </div>
+    <div class="about-grid-container">
+      <!-- Left: Polaroid / Profile Image (Transparent PNG) -->
+      <div class="about-col-photo">
+        <div class="profile-photo-wrapper">
+          <div class="profile-glow"></div>
+          <img src="/assets/profile-holguin.png" alt="Andres Holguin" class="profile-img-main" />
+        </div>
+      </div>
+      
+      <!-- Right: Sequential Strip / Shutter Reveal Information -->
+      <div class="about-col-info" id="about-info-container">
+        <div class="block-reveal-item" style="--reveal-idx: 0;">
+          <span class="block-strip"></span>
+          <h2 class="about-name" data-i18n="about_name">Andres Holguin</h2>
+        </div>
+        
+        <div class="block-reveal-item" style="--reveal-idx: 1;">
+          <span class="block-strip"></span>
+          <p class="about-role" data-i18n="about_role">Ingeniero en Sistemas • Diseño Digital</p>
+        </div>
+        
+        <div class="block-reveal-item block-multiline" style="--reveal-idx: 2;">
+          <span class="block-strip"></span>
+          <p class="about-bio" data-i18n="about_bio">Ingeniero en proceso y artista gráfico de medio tiempo. Vivo en Colombia (sáquenme) y suelo pasarme media vida en Steam.</p>
+        </div>
+        
+        <div class="block-reveal-item" style="--reveal-idx: 3;">
+          <span class="block-strip"></span>
+          <div class="about-badges">
+            <span class="about-pill" data-i18n="about_badge_1">Colombia (sáquenme)</span>
+            <span class="about-pill" data-i18n="about_badge_2">Steam Addict</span>
+            <span class="about-pill" data-i18n="about_badge_3">Ing. en Sistemas</span>
+            <span class="about-pill" data-i18n="about_badge_4">Diseño Digital</span>
+          </div>
+        </div>
+
+        <div class="block-reveal-item" style="--reveal-idx: 4;">
+          <span class="block-strip"></span>
+          <div class="about-social-links" id="author-social-links">
+            <a href="https://instagram.com" target="_blank" rel="noopener" class="social-icon-btn" id="social-link-instagram" title="Instagram">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+              <span>Instagram</span>
+            </a>
+            <a href="https://facebook.com" target="_blank" rel="noopener" class="social-icon-btn" id="social-link-facebook" title="Facebook">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+              <span>Facebook</span>
+            </a>
+            <a href="https://linkedin.com" target="_blank" rel="noopener" class="social-icon-btn" id="social-link-linkedin" title="LinkedIn">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+              <span>LinkedIn</span>
+            </a>
+            <a href="https://store.steampowered.com" target="_blank" rel="noopener" class="social-icon-btn" id="social-link-steam" title="Steam">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 0 0-10 10c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"></path></svg>
+              <span>Steam</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RANDOM SHUTTER SHOWCASE CAROUSEL SECTION (Static Slots with Multidirectional Wipe Transitions) -->
+  <section class="random-shutter-section stagger-item" style="--stagger-delay: 0.15s;" id="random-showcase">
+    <div class="carousel-header">
+      <span data-i18n="shutter_showcase_title">// exhibición aleatoria — transiciones multidireccionales</span>
+    </div>
+    <div class="random-shutter-grid" id="random-shutter-grid">
+      <!-- Dynamically rendered random slots -->
+    </div>
+  </section>
+
+  <!-- BACK TO TOP BUTTON (BELOW CAROUSEL FOR ORDER) -->
+  <div class="archive-footer-action stagger-item" style="--stagger-delay: 0.16s;" id="scroll-top-container">
+    <button id="scroll-top-btn" class="editorial-btn" data-i18n="back_to_top">↑ volver al inicio del archivo</button>
+  </div>
+
+  <!-- MODAL: Add / Edit Piece -->
+  <div class="modal-overlay hidden" id="piece-modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="modal-title" data-i18n="modal_add_title">subir nueva pieza al archivo</h3>
+        <button class="modal-close-btn" id="close-piece-modal">✕</button>
+      </div>
+      <form id="piece-form" class="admin-form">
+        <input type="hidden" id="form-piece-id" />
+        
+        <div class="form-grid-layout">
+          <!-- Left: Image Upload & Preview -->
+          <div class="form-col-image">
+            <label class="form-label" data-i18n="label_image">imagen de la pieza (1080x1920 vertical recomendado)</label>
+            <div class="drop-zone" id="image-drop-zone">
+              <input type="file" id="image-file-input" accept="image/*" class="hidden" />
+              <div class="drop-zone-prompt" id="drop-zone-prompt">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                <span data-i18n="drop_prompt">haz clic o arrastra tu imagen aquí (póster / diseño)</span>
+                <span class="sub-prompt" data-i18n="drop_sub">se guardará localmente en el servidor</span>
+              </div>
+              <img id="image-preview" class="image-preview hidden" alt="Preview" />
+            </div>
+            <input type="text" id="image-url-input" class="form-input mt-2" placeholder="O pega una URL o ruta de imagen (/assets/poster-1.png)" />
+          </div>
+
+          <!-- Right: Metadata & Descriptions -->
+          <div class="form-col-data">
+            <div class="form-row">
+              <div class="form-group flex-2">
+                <label class="form-label" for="piece-title" data-i18n="label_title">título de la obra</label>
+                <input type="text" id="piece-title" class="form-input" placeholder="Ej. SILENCE — Typographic Study" required />
+              </div>
+              <div class="form-group flex-1">
+                <label class="form-label" for="piece-year" data-i18n="label_year">año</label>
+                <input type="text" id="piece-year" class="form-input" placeholder="2026" required />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group flex-1">
+                <label class="form-label" for="piece-category" data-i18n="label_category">categoría / etiqueta</label>
+                <select id="piece-category" class="form-input">
+                  <!-- Dynamically populated -->
+                </select>
+              </div>
+              <div class="form-group flex-1">
+                <label class="form-label" for="piece-dimensions" data-i18n="label_dimensions">proporción / dimensiones</label>
+                <input type="text" id="piece-dimensions" class="form-input" value="1080 x 1920 px" placeholder="1080 x 1920 px" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="piece-tools" data-i18n="label_tools">herramientas / técnica (ficha técnica)</label>
+              <input type="text" id="piece-tools" class="form-input" placeholder="Ej. Illustrator, InDesign, Retícula Suiza 9:16" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="piece-desc-es" data-i18n="label_desc_es">descripción curatorial (español)</label>
+              <textarea id="piece-desc-es" class="form-textarea" rows="3" placeholder="Redacta en tono editorial de galería/catálogo sobre la técnica, composición, colores o sensación de la pieza..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="piece-desc-en" data-i18n="label_desc_en">descripción curatorial (inglés)</label>
+              <textarea id="piece-desc-en" class="form-textarea" rows="3" placeholder="Curatorial text in English describing technique, composition, palette..."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" id="cancel-piece-btn" data-i18n="btn_cancel">cancelar</button>
+          <button type="submit" class="btn-primary" data-i18n="btn_save_piece">guardar en archivo</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: Manage Categories -->
+  <div class="modal-overlay hidden" id="categories-modal">
+    <div class="modal-box modal-small">
+      <div class="modal-header">
+        <h3 data-i18n="modal_cats_title">gestionar categorías del archivo</h3>
+        <button class="modal-close-btn" id="close-cats-modal">✕</button>
+      </div>
+      <div class="cats-modal-body">
+        <div class="add-cat-row">
+          <input type="text" id="new-cat-input" class="form-input" placeholder="nueva categoría (ej. editorial, posters)..." />
+          <button type="button" id="btn-add-cat" class="btn-primary small" data-i18n="btn_add">agregar</button>
+        </div>
+        <ul id="cats-list-container" class="cats-list">
+          <!-- Dynamically rendered -->
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Manage Social Links -->
+  <div class="modal-overlay hidden" id="socials-modal">
+    <div class="modal-box modal-small">
+      <div class="modal-header">
+        <h3 data-i18n="modal_socials_title">configurar url de redes sociales</h3>
+        <button class="modal-close-btn" id="close-socials-modal">✕</button>
+      </div>
+      <form id="socials-form" class="admin-form mt-2" style="padding: 0 16px 16px;">
+        <div class="form-group mb-2">
+          <label class="form-label">Instagram URL</label>
+          <input type="url" id="social-input-instagram" class="form-input" placeholder="https://instagram.com/tu-usuario" />
+        </div>
+        <div class="form-group mb-2">
+          <label class="form-label">Facebook URL</label>
+          <input type="url" id="social-input-facebook" class="form-input" placeholder="https://facebook.com/tu-usuario" />
+        </div>
+        <div class="form-group mb-2">
+          <label class="form-label">LinkedIn URL</label>
+          <input type="url" id="social-input-linkedin" class="form-input" placeholder="https://linkedin.com/in/tu-usuario" />
+        </div>
+        <div class="form-group mb-2">
+          <label class="form-label">Steam URL</label>
+          <input type="url" id="social-input-steam" class="form-input" placeholder="https://store.steampowered.com/id/tu-usuario" />
+        </div>
+        <div class="modal-footer mt-3" style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 16px;">
+          <button type="button" class="btn-secondary" id="btn-cancel-socials" data-i18n="btn_cancel">cancelar</button>
+          <button type="submit" class="btn-primary" data-i18n="btn_save_socials">guardar redes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Site Footer (Transparent/Translucent so starry sky and gradient shine through to the very bottom) -->
+  <footer class="site-footer stagger-item" style="--stagger-delay: 0.18s;">
+    <div class="footer-inner">
+      <div class="footer-col branding">
+        <a href="#/" class="site-logo footer-logo-link">
+          <img src="/assets/logo.png" alt="Limbo Logo" class="header-logo-img" />
+          <span>limbo</span>
+        </a>
+        <p class="footer-tagline" data-i18n="footer_tagline">archivo digital de piezas gráficas curadas & diseño editorial. sin ruido visual, solo las obras y tipografía neutra.</p>
+        <p class="footer-contact mt-2"><a href="mailto:azzzzdresholguin@gmail.com" class="contact-email-link" data-i18n="footer_contact">contacto: azzzzdresholguin@gmail.com</a></p>
+        <p class="footer-copyright">© 2026 Limbo Archive. All rights reserved.</p>
+      </div>
+
+      <div class="footer-col links">
+        <h4 class="footer-col-title" data-i18n="footer_cats">categorías</h4>
+        <ul class="footer-list" id="footer-categories-list">
+          <!-- Dynamically populated -->
+        </ul>
+      </div>
+
+      <div class="footer-col links">
+        <h4 class="footer-col-title" data-i18n="footer_lang">idioma / language</h4>
+        <ul class="footer-list">
+          <li><a href="#" class="lang-link" data-lang="en">English (EN)</a></li>
+          <li><a href="#" class="lang-link" data-lang="es">Español (ES)</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col links">
+        <h4 class="footer-col-title" data-i18n="footer_social">redes & legal</h4>
+        <ul class="footer-list">
+          <li><a href="https://instagram.com" target="_blank" rel="noopener">Instagram</a></li>
+          <li><a href="https://pinterest.com" target="_blank" rel="noopener">Pinterest</a></li>
+          <li><a href="https://behance.net" target="_blank" rel="noopener">Behance</a></li>
+          <li class="mt-2"><a href="#/admin" class="highlight-link" data-i18n="curator_panel_link">→ admin</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
