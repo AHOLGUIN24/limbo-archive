@@ -83,7 +83,22 @@ export async function syncWithDatabase() {
       return inMemoryData;
     }
   } catch (err) {
-    console.warn('[LIMBO STORAGE] Servidor backend no disponible. Usando caché local o predeterminado.', err);
+    console.warn('[LIMBO STORAGE] Servidor backend no disponible. Intentando cargar archivo estático /data/archive.json...', err);
+  }
+
+  // Try loading static JSON from Vercel/CDN (/data/archive.json) with anti-cache timestamp
+  try {
+    const staticRes = await fetch(`/data/archive.json?t=${Date.now()}`);
+    if (staticRes.ok) {
+      const staticData = await staticRes.json();
+      if (staticData && staticData.pieces) {
+        inMemoryData = staticData;
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(inMemoryData));
+        return inMemoryData;
+      }
+    }
+  } catch (err) {
+    console.warn('[LIMBO STORAGE] No se pudo cargar /data/archive.json estático.', err);
   }
 
   // Fallback to localStorage or defaults
