@@ -311,6 +311,8 @@ function handleRoute() {
   const scrollTopCont = document.getElementById('scroll-top-container');
   const footerEl = document.querySelector('.site-footer');
 
+  const wasDetailVisible = !detailView.classList.contains('hidden');
+
   // Hide all main views
   galleryView.classList.add('hidden');
   detailView.classList.add('hidden');
@@ -339,7 +341,10 @@ function handleRoute() {
     if (scrollTopCont) scrollTopCont.classList.remove('hidden');
     if (footerEl) footerEl.classList.remove('hidden');
     renderDetailView(id);
-    window.scrollTo(0, 0);
+    if (!wasDetailVisible || !window.isArrowNav) {
+      window.scrollTo(0, 0);
+    }
+    window.isArrowNav = false;
   } else {
     // Gallery / default
     galleryView.classList.remove('hidden');
@@ -417,11 +422,11 @@ export function renderGallery() {
 
   grid.innerHTML = filtered.map((piece, index) => {
     const desc = currentLang === 'en' ? (piece.description_en || piece.description_es) : piece.description_es;
-    const delay = Math.min(0.5, 0.08 + index * 0.04).toFixed(2);
     return `
-      <article class="piece-card" id="card-${piece.id}" style="animation-delay: ${delay}s;">
+      <article class="piece-card" id="card-${piece.id}">
         <a href="#/piezas/${piece.id}" class="piece-image-link" title="${piece.title}">
-          <img src="${piece.image}" alt="${piece.title}" decoding="async" loading="${index < 4 ? 'eager' : 'lazy'}" onerror="this.src='/assets/poster-1.png'" />
+          <img src="${piece.image}" class="gallery-ambient-glow" aria-hidden="true" loading="lazy" />
+          <img src="${piece.image}" alt="${piece.title}" class="gallery-main-img" decoding="async" loading="${index < 4 ? 'eager' : 'lazy'}" onerror="this.src='/assets/poster-1.png'" />
         </a>
         <div class="piece-meta-area">
           <div class="piece-title-row">
@@ -436,6 +441,19 @@ export function renderGallery() {
       </article>
     `;
   }).join('');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px 50px 0px' });
+
+  grid.querySelectorAll('.piece-card').forEach(card => {
+    observer.observe(card);
+  });
 }
 
 function renderDetailView(pieceId) {
@@ -451,12 +469,39 @@ function renderDetailView(pieceId) {
   const dict = TRANSLATIONS[currentLang] || TRANSLATIONS.es;
   const desc = currentLang === 'en' ? (piece.description_en || piece.description_es) : piece.description_es;
 
+  // Calculate prev/next
+  const allPieces = getPieces();
+  const filtered = currentCategory === 'all' 
+    ? allPieces 
+    : allPieces.filter(p => p.category === currentCategory);
+  
+  const currentIndex = filtered.findIndex(p => p.id === pieceId);
+  let prevId = pieceId;
+  let nextId = pieceId;
+  if (currentIndex !== -1 && filtered.length > 1) {
+    prevId = currentIndex === 0 ? filtered[filtered.length - 1].id : filtered[currentIndex - 1].id;
+    nextId = currentIndex === filtered.length - 1 ? filtered[0].id : filtered[currentIndex + 1].id;
+  }
+
   // Dynamically update SEO
   document.title = `Limbo — ${piece.title} (${piece.year})`;
   const metaDesc = document.querySelector('meta[name="description"]');
   if (metaDesc) metaDesc.setAttribute('content', desc);
 
+  // Trigger animation
+  container.classList.remove('detail-animate-enter');
+  void container.offsetWidth; // force reflow
+  container.classList.add('detail-animate-enter');
+
   container.innerHTML = `
+    ${filtered.length > 1 ? `
+      <a href="#/piezas/${prevId}" class="detail-nav-arrow detail-nav-prev" title="Anterior">
+        <svg viewBox="0 0 24 24" width="48" height="48"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+      </a>
+      <a href="#/piezas/${nextId}" class="detail-nav-arrow detail-nav-next" title="Siguiente">
+        <svg viewBox="0 0 24 24" width="48" height="48"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+      </a>
+    ` : ''}
     <div class="detail-image-box">
       <div class="ambient-glow-wrapper">
         <img src="${piece.image}" class="ambient-glow-bg" aria-hidden="true" onerror="this.style.display='none'" />
@@ -496,6 +541,11 @@ function renderDetailView(pieceId) {
       </div>
     </aside>
   `;
+
+  const navPrev = container.querySelector('.detail-nav-prev');
+  const navNext = container.querySelector('.detail-nav-next');
+  if (navPrev) navPrev.addEventListener('click', () => window.isArrowNav = true);
+  if (navNext) navNext.addEventListener('click', () => window.isArrowNav = true);
 }
 
 let carouselRAF = null;
@@ -676,7 +726,7 @@ export function initRandomShutterShowcase() {
 
   if (randomShowcaseTimer) clearInterval(randomShowcaseTimer);
   if (pieces.length > 1) {
-    randomShowcaseTimer = setInterval(() => triggerRandomShutterSwap(), 1900);
+    randomShowcaseTimer = setInterval(() => triggerRandomShutterSwap(), 1100);
   }
 }
 
@@ -731,11 +781,11 @@ function triggerRandomShutterSwap() {
         img.src = newPiece.image;
         img.alt = newPiece.title;
       }
-    }, 310);
+    }, 200);
 
     setTimeout(() => {
       wipeEl.classList.remove('wiping', chosenDir);
-    }, 680);
+    }, 450);
   });
 }
 
