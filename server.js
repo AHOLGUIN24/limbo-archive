@@ -116,6 +116,11 @@ function readDB() {
 function writeDB(data) {
   try {
     fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2), 'utf-8');
+    const PUBLIC_DATA_DIR = path.join(__dirname, 'public', 'data');
+    if (!fs.existsSync(PUBLIC_DATA_DIR)) {
+      fs.mkdirSync(PUBLIC_DATA_DIR, { recursive: true });
+    }
+    fs.writeFileSync(path.join(PUBLIC_DATA_DIR, 'archive.json'), JSON.stringify(data, null, 2), 'utf-8');
     return true;
   } catch (err) {
     console.error('Error writing database file:', err);
