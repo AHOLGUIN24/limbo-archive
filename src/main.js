@@ -546,6 +546,28 @@ function renderDetailView(pieceId) {
   const navNext = container.querySelector('.detail-nav-next');
   if (navPrev) navPrev.addEventListener('click', () => window.isArrowNav = true);
   if (navNext) navNext.addEventListener('click', () => window.isArrowNav = true);
+
+  // Mobile Swipe Support
+  const detailImgBox = container.querySelector('.detail-image-box');
+  if (detailImgBox) {
+    let touchStartX = 0;
+    detailImgBox.addEventListener('touchstart', e => {
+      if (e.changedTouches.length > 0) {
+        touchStartX = e.changedTouches[0].screenX;
+      }
+    }, { passive: true });
+    
+    detailImgBox.addEventListener('touchend', e => {
+      if (e.changedTouches.length > 0) {
+        const touchEndX = e.changedTouches[0].screenX;
+        if (touchEndX < touchStartX - 50) { // Swiped left -> next
+          if (navNext) navNext.click();
+        } else if (touchEndX > touchStartX + 50) { // Swiped right -> prev
+          if (navPrev) navPrev.click();
+        }
+      }
+    }, { passive: true });
+  }
 }
 
 let carouselRAF = null;

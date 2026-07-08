@@ -6,6 +6,30 @@
   ],
   "pieces": [
     {
+      "id": "limbo-mrbu496u-1fd2",
+      "title": "MICHAEL",
+      "year": "2026",
+      "category": "posters",
+      "dimensions": "1080 x 1920 px",
+      "tools": "Photoshop",
+      "image": "https://i.postimg.cc/264SVb6R/michaeljackson.jpg",
+      "description_es": "Muito chevere",
+      "description_en": "Muito chevere",
+      "createdAt": "2026-07-08T08:47:28.134Z"
+    },
+    {
+      "id": "limbo-mrbu30o1-0ecs",
+      "title": "ASS ALLT THE TIME DISCO OCCASIONALLY",
+      "year": "2026",
+      "category": "posters",
+      "dimensions": "1080 x 1920 px",
+      "tools": "Photoshop",
+      "image": "https://i.postimg.cc/j5VjxQRg/HARRY.png",
+      "description_es": "Ta weno",
+      "description_en": "Ta weno",
+      "createdAt": "2026-07-08T08:46:30.433Z"
+    },
+    {
       "id": "limbo-mrbsnrac-twzp",
       "title": "VAGABOND",
       "year": "2025",

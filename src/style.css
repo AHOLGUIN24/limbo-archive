@@ -713,6 +713,7 @@ img {
   border: none;
   padding: 0;
   box-shadow: none;
+  touch-action: pan-y;
 }
 
 .ambient-glow-wrapper {
@@ -865,6 +866,7 @@ img {
   background: var(--bg-translucent);
   backdrop-filter: blur(10px);
   transition: background-color 0.3s ease;
+  touch-action: pan-y;
 }
 
 .carousel-header {
@@ -2248,11 +2250,14 @@ img {
 
 @media (max-width: 900px) {
   .detail-nav-arrow {
-    width: 48px;
-    height: 48px;
+    display: none !important;
   }
-  .detail-nav-arrow svg {
-    width: 32px;
-    height: 32px;
-  }
+}
+
+/* Performance Optimizations */
+.gallery-ambient-glow, .ambient-glow-bg {
+  will-change: transform, opacity;
+}
+.piece-image-link img, .detail-main-img {
+  will-change: transform;
 }
